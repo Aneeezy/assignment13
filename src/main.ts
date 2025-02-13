@@ -26,7 +26,7 @@ function initializeGame() {
 }
 
 function cellClicked(this: HTMLElement) {
-    const cellIndex = this.getAttribute("cellIndex");
+    const cellIndex = this.getAttribute("data-Index");
 
     if (!cellIndex || options[+cellIndex] !== "" || !running) {
         return;
@@ -65,7 +65,7 @@ function checkWinner() {
     if (roundWon) {
         statusText.textContent = `${currentPlayer} wins!`;
         running = false;
-    } if (!options.some(value => value === "")) {
+    } else if (!options.some(value => value === "")) {
         statusText.textContent = `Draw!`;
         running = false;
     } else {
