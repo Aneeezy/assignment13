@@ -11,44 +11,52 @@ const winConditions = [
   [0, 4, 8],
   [2, 4, 6]
 ];
-let options = ["", "", "", "", "", "", "", "", ""];
-let currentPlayer = "X";
-let running = false;
+let options = JSON.parse(localStorage.getItem("boardState") || '["", "", "", "", "", "", "", "", ""]');
+let currentPlayer = localStorage.getItem("currentPlayer") || "X";
+let running = true;
 function initializeGame() {
-  cells.forEach((cell) => {
-    cell.addEventListener("click", cellClicked);
+  cells.forEach((cell, index) => {
+    const cellElement = cell;
+    cellElement.textContent = options[index];
+    cellElement.addEventListener("click", () => cellClicked(index));
+    cellElement.addEventListener("mouseenter", () => showPreview(index));
+    cellElement.addEventListener("mouseleave", () => removePreview(index));
   });
   restartBtn.addEventListener("click", restartGame);
   statusText.textContent = `${currentPlayer}'s turn`;
-  running = true;
 }
-function cellClicked() {
-  const cellIndex = this.getAttribute("data-Index");
-  if (!cellIndex || options[+cellIndex] !== "" || !running) {
-    return;
-  }
-  updateCell(this, +cellIndex);
+function cellClicked(index) {
+  if (options[index] !== "" || !running) return;
+  updateCell(index);
   checkWinner();
 }
-function updateCell(cell, index) {
+function updateCell(index) {
   options[index] = currentPlayer;
-  cell.textContent = currentPlayer;
+  cells[index].textContent = currentPlayer;
+  saveGameState();
+}
+function showPreview(index) {
+  if (options[index] === "") {
+    cells[index].textContent = currentPlayer;
+    cells[index].style.opacity = "0.5";
+  }
+}
+function removePreview(index) {
+  if (options[index] === "") {
+    cells[index].textContent = "";
+    cells[index].style.opacity = "1";
+  }
 }
 function changePlayer() {
   currentPlayer = currentPlayer === "X" ? "O" : "X";
   statusText.textContent = `${currentPlayer}'s turn`;
+  localStorage.setItem("currentPlayer", currentPlayer);
 }
 function checkWinner() {
   let roundWon = false;
-  for (let i = 0; i < winConditions.length; i++) {
-    const condition = winConditions[i];
-    const cellA = options[condition[0]];
-    const cellB = options[condition[1]];
-    const cellC = options[condition[2]];
-    if (cellA === "" || cellB === "" || cellC === "") {
-      continue;
-    }
-    if (cellA === cellB && cellB === cellC) {
+  for (let condition of winConditions) {
+    const [a, b, c] = condition;
+    if (options[a] !== "" && options[a] === options[b] && options[b] === options[c]) {
       roundWon = true;
       break;
     }
@@ -69,8 +77,15 @@ function restartGame() {
   running = true;
   statusText.textContent = `${currentPlayer}'s turn`;
   cells.forEach((cell) => {
-    cell.textContent = "";
+    const cellElement = cell;
+    cellElement.textContent = "";
+    cellElement.style.opacity = "1";
   });
+  saveGameState();
+}
+function saveGameState() {
+  localStorage.setItem("boardState", JSON.stringify(options));
+  localStorage.setItem("currentPlayer", currentPlayer);
 }
 initializeGame();
 //# sourceMappingURL=main.js.map

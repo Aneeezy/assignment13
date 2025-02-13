@@ -9,6 +9,7 @@ All files should be edited in the `src` folder. The `build` folder is generated 
 Add new HTML, CSS, and TypeScript files to the `src` folder as needed.
 
 ## Bundling
+
 To start the bundle process, run `npm run build`. This will create a `build` folder with the bundled files.
 
 If you want to run the bundle process in watch mode, run `npm run build:watch`.
