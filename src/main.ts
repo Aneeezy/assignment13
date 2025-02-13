@@ -7,7 +7,7 @@ const winConditions = [
     [0, 4, 8], [2, 4, 6]
 ];
 
-// Load game state from localStorage
+
 let options: string[] = JSON.parse(localStorage.getItem("boardState") || '["", "", "", "", "", "", "", "", ""]');
 let currentPlayer: string = localStorage.getItem("currentPlayer") || "X";
 let running: boolean = true;
@@ -16,10 +16,10 @@ function initializeGame() {
     cells.forEach((cell, index) => {
         const cellElement = cell as HTMLElement;
 
-        // Restore board state
+
         cellElement.textContent = options[index];
 
-        // Add event listeners
+
         cellElement.addEventListener("click", () => cellClicked(index));
         cellElement.addEventListener("mouseenter", () => showPreview(index));
         cellElement.addEventListener("mouseleave", () => removePreview(index));
@@ -40,13 +40,13 @@ function updateCell(index: number) {
     options[index] = currentPlayer;
     (cells[index] as HTMLElement).textContent = currentPlayer;
 
-    saveGameState(); // Save to localStorage
+    saveGameState();
 }
 
 function showPreview(index: number) {
     if (options[index] === "") {
         (cells[index] as HTMLElement).textContent = currentPlayer;
-        (cells[index] as HTMLElement).style.opacity = "0.5"; // Faded effect
+        (cells[index] as HTMLElement).style.opacity = "0.5";
     }
 }
 
@@ -61,7 +61,7 @@ function changePlayer() {
     currentPlayer = currentPlayer === "X" ? "O" : "X";
     statusText.textContent = `${currentPlayer}'s turn`;
 
-    localStorage.setItem("currentPlayer", currentPlayer); // Save current player
+    localStorage.setItem("currentPlayer", currentPlayer);
 }
 
 function checkWinner() {
@@ -95,16 +95,16 @@ function restartGame() {
     cells.forEach(cell => {
         const cellElement = cell as HTMLElement;
         cellElement.textContent = "";
-        cellElement.style.opacity = "1"; // Reset opacity
+        cellElement.style.opacity = "1";
     });
 
-    saveGameState(); // Reset localStorage
+    saveGameState();
 }
 
 function saveGameState() {
     localStorage.setItem("boardState", JSON.stringify(options));
     localStorage.setItem("currentPlayer", currentPlayer);
-    localStorage.setItem("statusText", statusText.textContent || ""); // Fixed this line
+    localStorage.setItem("statusText", statusText.textContent || "");
 }
 
 
