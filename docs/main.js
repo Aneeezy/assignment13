@@ -86,7 +86,6 @@ function restartGame() {
 function saveGameState() {
   localStorage.setItem("boardState", JSON.stringify(options));
   localStorage.setItem("currentPlayer", currentPlayer);
-  localStorage.setItem("statusText", statusText.textContent || "");
 }
 initializeGame();
 //# sourceMappingURL=main.js.map
